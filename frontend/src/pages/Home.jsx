@@ -1,14 +1,24 @@
+import { useState } from "react";
 import FolderSidebar from "../components/FolderSidebar.jsx";
+import NoteList from "../components/NoteList.jsx";
 
 export default function Home() {
+  const [selectedFolder, setSelectedFolder] = useState("Personal");
+
+  const noteData = {
+    Personal: ["Shopping list", "Daily journal"],
+    Work: ["Project plan", "Meeting notes"],
+    School: ["Homework", "Study notes"],
+  };
+
   return (
     <div style={{ display: "flex" }}>
-      <FolderSidebar />
+      <FolderSidebar onSelectFolder={setSelectedFolder} />
 
-      <div style={{ padding: "20px", width: "100%" }}>
-        <h1>Your Notes</h1>
-        <p>Select a folder to view notes.</p>
-      </div>
+      <NoteList
+        folder={selectedFolder}
+        notes={noteData[selectedFolder] || []}
+      />
     </div>
   );
 }

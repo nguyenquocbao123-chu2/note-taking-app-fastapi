@@ -1,18 +1,12 @@
 import { useState } from "react";
 
-export default function FolderSidebar() {
-  const [folders, setFolders] = useState([
-    "Personal",
-    "Work",
-    "School"
-  ]);
-
+export default function FolderSidebar({ onSelectFolder }) {
+  const [folders, setFolders] = useState(["Personal", "Work", "School"]);
   const [isAdding, setIsAdding] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
 
   const handleAddFolder = () => {
     if (newFolderName.trim() === "") return;
-
     setFolders([...folders, newFolderName]);
     setNewFolderName("");
     setIsAdding(false);
@@ -32,6 +26,7 @@ export default function FolderSidebar() {
         {folders.map((folder, index) => (
           <li
             key={index}
+            onClick={() => onSelectFolder(folder)}
             style={{
               padding: "8px",
               marginBottom: "8px",
