@@ -7,7 +7,9 @@ export default function Home() {
   const [selectedFolder, setSelectedFolder] = useState("Personal");
 
   const [notes, setNotes] = useState({
-    
+    Personal: ["Shopping list", "Daily journal"],
+    Work: ["Project plan", "Meeting notes"],
+    School: ["Homework", "Study notes"],
   });
 
   const handleCreateNote = (newNote) => {
@@ -21,19 +23,42 @@ export default function Home() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{
+      display: "flex",
+      height: "100vh",
+      overflow: "hidden"
+    }}>
+      
+      {/* Sidebar trái */}
       <FolderSidebar onSelectFolder={setSelectedFolder} />
 
-      <div style={{ padding: "20px", width: "100%" }}>
+      {/* Main content */}
+      <div style={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        padding: "20px",
+        overflow: "hidden"
+      }}>
+        
+        {/* Note list (scrollable) */}
+        <div style={{
+          flex: 1,
+          overflowY: "auto",
+          paddingRight: "10px"
+        }}>
+          <NoteList 
+            folder={selectedFolder} 
+            notes={notes[selectedFolder] || []} 
+          />
+        </div>
 
-        {/* DANH SÁCH NOTE Ở TRÊN */}
-        <NoteList
-          folder={selectedFolder}
-          notes={notes[selectedFolder] || []}
-        />
-
-        {/* CREATE NEW NOTE Ở DƯỚI */}
-        <div style={{ marginTop: "30px" }}>
+        {/* NEW NOTE — fixed bottom */}
+        <div style={{
+          padding: "15px",
+          background: "white",
+          borderTop: "1px solid #ddd"
+        }}>
           <NewNote onCreate={handleCreateNote} />
         </div>
 
