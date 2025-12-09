@@ -1,14 +1,7 @@
-import Navbar from "./components/Navbar.jsx";
-import Register from "./pages/Register.jsx"; 
-import "./App.css";
+import AppRouter from "./AppRouter.jsx";
 
 function App() {
-  return (
-    <>
-      <Navbar />
-      <Register />
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;

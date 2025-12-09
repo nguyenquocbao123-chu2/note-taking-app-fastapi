@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -11,10 +11,19 @@ export default function Navbar() {
       justifyContent: "space-between",
       alignItems: "center"
     }}>
-      <h2>Note App</h2>
+      <h2>
+        <Link to="/" style={{ color: "white", textDecoration: "none" }}>
+          Note App
+        </Link>
+      </h2>
+
       <div>
-        <button style={{ marginRight: "10px" }}>Login</button>
-        <button>Register</button>
+        <Link to="/login" style={{ marginRight: "10px", color: "white" }}>
+          Login
+        </Link>
+        <Link to="/register" style={{ color: "white" }}>
+          Register
+        </Link>
       </div>
     </nav>
   );
