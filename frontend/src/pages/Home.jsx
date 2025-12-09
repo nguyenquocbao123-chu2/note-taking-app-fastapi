@@ -13,14 +13,18 @@ export default function Home() {
   });
 
   const handleCreateNote = (newNote) => {
-    setNotes({
-      ...notes,
-      [selectedFolder]: [
-        ...notes[selectedFolder],
-        `${newNote.title}: ${newNote.content}`
-      ]
-    });
-  };
+  setNotes({
+    ...notes,
+    [selectedFolder]: [
+      ...notes[selectedFolder],
+      {
+        title: newNote.title,
+        content: newNote.content,
+        tags: newNote.tags
+      }
+    ]
+  });
+};
 
   return (
     <div style={{
