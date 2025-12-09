@@ -7,15 +7,16 @@ export default function Home() {
   const [selectedFolder, setSelectedFolder] = useState("Personal");
 
   const [notes, setNotes] = useState({
-    Personal: ["Shopping list", "Daily journal"],
-    Work: ["Project plan", "Meeting notes"],
-    School: ["Homework", "Study notes"],
+    
   });
 
   const handleCreateNote = (newNote) => {
     setNotes({
       ...notes,
-      [selectedFolder]: [...notes[selectedFolder], `${newNote.title}: ${newNote.content}`]
+      [selectedFolder]: [
+        ...notes[selectedFolder],
+        `${newNote.title}: ${newNote.content}`
+      ]
     });
   };
 
@@ -24,12 +25,18 @@ export default function Home() {
       <FolderSidebar onSelectFolder={setSelectedFolder} />
 
       <div style={{ padding: "20px", width: "100%" }}>
-        <NewNote onCreate={handleCreateNote} />
 
+        {/* DANH SÁCH NOTE Ở TRÊN */}
         <NoteList
           folder={selectedFolder}
           notes={notes[selectedFolder] || []}
         />
+
+        {/* CREATE NEW NOTE Ở DƯỚI */}
+        <div style={{ marginTop: "30px" }}>
+          <NewNote onCreate={handleCreateNote} />
+        </div>
+
       </div>
     </div>
   );
