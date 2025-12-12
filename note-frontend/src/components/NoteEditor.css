@@ -1,8 +1,9 @@
 .keep-editor-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 32px;
+  margin: 32px 0 48px;   /* tăng khoảng cách */
 }
+
 
 .keep-editor {
   width: 600px;
@@ -11,6 +12,7 @@
   padding: 12px 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,.2);
   cursor: text;
+  max-width: 90%;
 }
 
 .keep-editor.expanded {

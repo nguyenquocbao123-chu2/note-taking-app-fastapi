@@ -3,8 +3,13 @@ import "./NoteList.css";
 
 export default function NoteList({ notes, onSelect }) {
   if (notes.length === 0) {
-    return <p className="keep-empty">Chưa có ghi chú nào.</p>;
-  }
+  return (
+    <p className="keep-empty">
+      🗒️ Chưa có ghi chú nào
+    </p>
+  );
+}
+
 
   return (
     <div className="keep-notes-grid">
