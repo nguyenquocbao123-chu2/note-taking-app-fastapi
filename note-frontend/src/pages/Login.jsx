@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { login } from "../api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/auth.css";
@@ -35,6 +35,7 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
+            required
           />
 
           <label>Mật khẩu</label>
@@ -43,9 +44,12 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
+            required
           />
 
-          <button className="auth-btn" type="submit">Đăng nhập</button>
+          <button className="auth-btn" type="submit">
+            Đăng nhập
+          </button>
         </form>
 
         <div className="auth-link">

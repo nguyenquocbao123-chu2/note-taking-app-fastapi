@@ -1,94 +1,74 @@
 .auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
   height: 100vh;
-  background: #f4f7fb;
-  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f7fa;
 }
 
 .auth-box {
-  width: 100%;
-  max-width: 420px;
-  padding: 32px;
-  background: white;
+  width: 360px;
+  padding: 28px;
+  background: #ffffff;
   border-radius: 14px;
-  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.08);
-  animation: fadeIn 0.35s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .auth-title {
-  font-size: 28px;
-  font-weight: bold;
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
 }
 
 .auth-box label {
-  font-weight: 600;
   display: block;
-  margin-bottom: 6px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .auth-box input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 18px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
   border-radius: 8px;
-  font-size: 15px;
-  transition: 0.25s;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
 }
 
 .auth-box input:focus {
-  border-color: #4a90e2;
-  box-shadow: 0px 0px 5px rgba(74, 144, 226, 0.4);
-  outline: none;
+  border-color: #1677ff;
 }
 
 .auth-btn {
   width: 100%;
-  padding: 12px;
-  background: #4a90e2;
-  color: white;
-  font-weight: bold;
-  border: none;
+  margin-top: 16px;
+  padding: 10px;
   border-radius: 8px;
+  border: none;
+  background-color: #1677ff;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 16px;
-  transition: 0.25s;
 }
 
 .auth-btn:hover {
-  background: #357ABD;
+  background-color: #0958d9;
 }
 
 .auth-link {
-  margin-top: 16px;
   text-align: center;
+  margin-top: 14px;
   font-size: 14px;
-}
-
-.auth-link a {
-  color: #4a90e2;
-  text-decoration: none;
-  font-weight: bold;
 }
 
 .error-text {
   color: red;
   font-size: 14px;
+  margin-bottom: 8px;
   text-align: center;
-  margin-bottom: 12px;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
