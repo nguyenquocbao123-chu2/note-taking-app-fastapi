@@ -3,7 +3,13 @@ import Layout from "../components/Layout";
 import NoteList from "../components/NoteList";
 import NoteEditor from "../components/NoteEditor";
 import SearchBox from "../components/SearchBox";
-import { getNotes, createNote, updateNote, deleteNote, searchNotes } from "../api/notes";
+import {
+  getNotes,
+  createNote,
+  updateNote,
+  deleteNote,
+  searchNotes,
+} from "../api/notes";
 import { useNavigate } from "react-router-dom";
 
 export default function NotesPage() {
@@ -16,9 +22,6 @@ export default function NotesPage() {
     try {
       const data = await getNotes();
       setNotes(data);
-      if (data.length > 0 && !selected) {
-        setSelected(data[0]);
-      }
     } catch (err) {
       if (err.response?.status === 401) {
         navigate("/login");
@@ -30,70 +33,72 @@ export default function NotesPage() {
     loadNotes();
   }, []);
 
-  // Search realtime (simple debounce)
+  // Search realtime
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      if (search.trim() === "") {
+      if (!search.trim()) {
         loadNotes();
       } else {
         const data = await searchNotes(search);
         setNotes(data);
-        if (data.length > 0) {
-          setSelected(data[0]);
-        } else {
-          setSelected(null);
-        }
       }
     }, 300);
 
     return () => clearTimeout(timeout);
   }, [search]);
 
-  const handleSelectNote = (note) => {
-    setSelected(note);
-  };
-
-  const handleNewNote = () => {
-    setSelected(null);
-  };
-
   const handleSaveNote = async ({ title, content }) => {
     if (!title.trim() && !content.trim()) return;
 
     if (!selected) {
-      const created = await createNote(title, content);
-      await loadNotes();
-      setSelected(created);
+      await createNote(title, content);
     } else {
-      const updated = await updateNote(selected.id, { title, content });
-      await loadNotes();
-      setSelected(updated);
+      await updateNote(selected.id, { title, content });
     }
+
+    setSelected(null);
+    loadNotes();
   };
 
   const handleDeleteNote = async () => {
     if (!selected) return;
     await deleteNote(selected.id);
-    await loadNotes();
     setSelected(null);
+    loadNotes();
   };
 
   return (
     <Layout>
-      <div style={{ width: "30%", padding: "10px", borderRight: "1px solid #ddd" }}>
-        <SearchBox value={search} onChange={setSearch} />
+      {/* SIDEBAR */}
+      <aside className="keep-sidebar">
+        <div className="keep-menu active">Ghi chú</div>
+        <div className="keep-menu">Lời nhắc</div>
+        <div className="keep-menu">Lưu trữ</div>
+        <div className="keep-menu">Thùng rác</div>
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="keep-main">
+        <div className="keep-search">
+          <SearchBox value={search} onChange={setSearch} />
+        </div>
+
+        {/* CREATE / EDIT NOTE */}
+        <div className="keep-editor">
+          <NoteEditor
+            note={selected}
+            onSave={handleSaveNote}
+            onDelete={handleDeleteNote}
+            onCancel={() => setSelected(null)}
+          />
+        </div>
+
+        {/* NOTES GRID */}
         <NoteList
           notes={notes}
-          selectedId={selected?.id}
-          onSelect={handleSelectNote}
+          onSelect={(note) => setSelected(note)}
         />
-      </div>
-      <NoteEditor
-        note={selected}
-        onNew={handleNewNote}
-        onSave={handleSaveNote}
-        onDelete={handleDeleteNote}
-      />
+      </main>
     </Layout>
   );
 }
