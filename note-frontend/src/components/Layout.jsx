@@ -26,15 +26,30 @@ export default function Layout({ children, search, setSearch }) {
 
         <SearchBox value={search} onChange={setSearch} />
 
-        <button
-          className="logout-btn"
-          onClick={() => {
-            logout();
-            navigate("/login");
-          }}
-        >
-          Đăng xuất
-        </button>
+       <div className="keep-header-right">
+  <button className="icon-btn" title="Làm mới">
+    🔄
+  </button>
+
+  <button className="icon-btn" title="Chế độ xem">
+    ⬜
+  </button>
+
+  <button className="icon-btn" title="Cài đặt">
+    ⚙️
+  </button>
+
+  <button
+    className="logout-btn"
+    onClick={() => {
+      logout();
+      navigate("/login");
+    }}
+  >
+    Đăng xuất
+  </button>
+</div>
+
       </header>
 
       {/* BODY */}
