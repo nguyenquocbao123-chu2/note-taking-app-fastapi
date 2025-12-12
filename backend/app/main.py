@@ -1,16 +1,31 @@
 from fastapi import FastAPI
-from .db import Base, engine
-from .routers import folder_router, note_router, tag_router
+from fastapi.middleware.cors import CORSMiddleware
 
-Base.metadata.create_all(bind=engine)
+from app.routers import auth, notes, folders, tags, search, share
 
-app = FastAPI()
+app = FastAPI(title="Note Taking App Backend")
 
-app.include_router(folder_router.router)
-app.include_router(note_router.router)
-app.include_router(tag_router.router)
+# ==========================
+# FIX CORS ERROR TẠI ĐÂY
+# ==========================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],            # CHO PHÉP TẤT CẢ
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# ==========================
+# ROUTERS
+# ==========================
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(notes.router, prefix="/notes", tags=["Notes"])
+app.include_router(folders.router, prefix="/folders", tags=["Folders"])
+app.include_router(tags.router, prefix="/tags", tags=["Tags"])
+app.include_router(search.router, prefix="/search", tags=["Search"])
+app.include_router(share.router, prefix="/share", tags=["Share"])
 
 @app.get("/")
 def root():
-    return {"status": "OK", "message": "Note API running!"}
+    return {"message": "Backend chạy OK"}

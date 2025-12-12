@@ -1,38 +1,87 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from datetime import datetime
+from typing import Optional, List
 
 
-class TagBase(BaseModel):
-    name: str
+# ================= USER =====================
+class UserCreate(BaseModel):
+    email: str
+    password: str
+    full_name: Optional[str] = None
 
 
-class Tag(TagBase):
+class UserRead(BaseModel):
     id: int
+    email: str
+    full_name: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
+
+# ================= AUTH TOKEN =====================
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+# ================= FOLDER =====================
+
+class FolderBase(BaseModel):
+    name: str
+    parent_id: Optional[int] = None
+
+
+class FolderCreate(FolderBase):
+    pass
+
+
+class FolderRead(FolderBase):
+    id: int
+    owner_id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ================= NOTE =====================
 
 class NoteBase(BaseModel):
     title: str
     content: str
-    tags: List[int] = []
 
 
-class Note(NoteBase):
+class NoteCreate(NoteBase):
+    folder_id: Optional[int] = None
+
+
+class NoteUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    folder_id: Optional[int] = None
+    is_archived: Optional[bool] = None
+
+
+class NoteRead(NoteBase):
     id: int
+    folder_id: Optional[int]
+    owner_id: int
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
-class FolderBase(BaseModel):
+# ================= TAG =====================
+
+class TagCreate(BaseModel):
     name: str
 
 
-class Folder(FolderBase):
+class TagRead(BaseModel):
     id: int
-    notes: List[Note] = []
+    name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

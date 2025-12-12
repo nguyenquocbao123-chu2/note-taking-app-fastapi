@@ -1,38 +1,88 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
-from sqlalchemy.orm import relationship
-from .db import Base
+from __future__ import annotations
+from typing import Optional, List
+from datetime import datetime
 
-note_tags_table = Table(
-    "note_tags",
-    Base.metadata,
-    Column("note_id", ForeignKey("notes.id"), primary_key=True),
-    Column("tag_id", ForeignKey("tags.id"), primary_key=True),
-)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlmodel import SQLModel, Field
 
 
-class Folder(Base):
-    __tablename__ = "folders"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-
-    notes = relationship("Note", back_populates="folder")
-
-
-class Note(Base):
-    __tablename__ = "notes"
-    id = Column(Integer, primary_key=True, index=True)
-    folder_id = Column(Integer, ForeignKey("folders.id"))
-    title = Column(String, nullable=False)
-    content = Column(Text)
-    created_at = Column(String)
-
-    folder = relationship("Folder", back_populates="notes")
-    tags = relationship("Tag", secondary=note_tags_table, back_populates="notes")
+# ===========================================================
+# NOTE-TAG JOIN TABLE
+# ===========================================================
+class NoteTag(SQLModel, table=True):
+    note_id: int = Field(foreign_key="note.id", primary_key=True)
+    tag_id: int = Field(foreign_key="tag.id", primary_key=True)
 
 
-class Tag(Base):
-    __tablename__ = "tags"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
+# ===========================================================
+# USER
+# ===========================================================
+class User(SQLModel, table=True):
+    id: Optional[int] = mapped_column(primary_key=True)
+    email: str = mapped_column(unique=True, index=True)
+    password_hash: str
+    full_name: Optional[str] = None
+    created_at: datetime = mapped_column(default=datetime.utcnow)
 
-    notes = relationship("Note", secondary=note_tags_table, back_populates="tags")
+    notes: Mapped[List["Note"]] = relationship(back_populates="owner")
+    folders: Mapped[List["Folder"]] = relationship(back_populates="owner")
+
+
+# ===========================================================
+# FOLDER
+# ===========================================================
+class Folder(SQLModel, table=True):
+    id: Optional[int] = mapped_column(primary_key=True)
+    name: str
+    parent_id: Optional[int] = Field(default=None, foreign_key="folder.id")
+    owner_id: int = Field(foreign_key="user.id")
+
+    owner: Mapped["User"] = relationship(back_populates="folders")
+    notes: Mapped[List["Note"]] = relationship(back_populates="folder")
+
+
+# ===========================================================
+# TAG
+# ===========================================================
+class Tag(SQLModel, table=True):
+    id: Optional[int] = mapped_column(primary_key=True)
+    name: str
+    owner_id: int = Field(foreign_key="user.id")
+
+    notes: Mapped[List["Note"]] = relationship(
+        secondary=NoteTag.__table__,
+        back_populates="tags"
+    )
+
+
+# ===========================================================
+# NOTE
+# ===========================================================
+class Note(SQLModel, table=True):
+    id: Optional[int] = mapped_column(primary_key=True)
+    title: str
+    content: str
+    folder_id: Optional[int] = Field(default=None, foreign_key="folder.id")
+    owner_id: int = Field(foreign_key="user.id")
+    is_archived: bool = Field(default=False)
+
+    created_at: datetime = mapped_column(default=datetime.utcnow)
+    updated_at: datetime = mapped_column(default=datetime.utcnow)
+
+    owner: Mapped["User"] = relationship(back_populates="notes")
+    folder: Mapped[Optional["Folder"]] = relationship(back_populates="notes")
+    tags: Mapped[List["Tag"]] = relationship(
+        secondary=NoteTag.__table__,
+        back_populates="notes"
+    )
+
+
+# ===========================================================
+# SHARED LINK
+# ===========================================================
+class SharedLink(SQLModel, table=True):
+    id: Optional[int] = mapped_column(primary_key=True)
+    note_id: int = Field(foreign_key="note.id")
+    public_slug: str = mapped_column(unique=True, index=True)
+    expired_at: Optional[datetime] = None
+    is_public: bool = Field(default=True)

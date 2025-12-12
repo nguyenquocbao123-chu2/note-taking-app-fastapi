@@ -1,0 +1,69 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
+
+from app.schemas import NoteCreate, NoteRead, NoteUpdate
+from app.models import Note
+from app.core.auth import get_current_user
+from app.database import get_session
+
+router = APIRouter()
+
+
+@router.post("/", response_model=NoteRead)
+def create_note(data: NoteCreate,
+                session: Session = Depends(get_session),
+                user=Depends(get_current_user)):
+
+    note = Note(**data.dict(), owner_id=user.id)
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
+
+
+@router.get("/", response_model=list[NoteRead])
+def list_notes(session: Session = Depends(get_session),
+               user=Depends(get_current_user)):
+    notes = session.exec(select(Note).where(Note.owner_id == user.id)).all()
+    return notes
+
+
+@router.get("/{note_id}", response_model=NoteRead)
+def get_note(note_id: int,
+             session: Session = Depends(get_session),
+             user=Depends(get_current_user)):
+    note = session.exec(select(Note).where(Note.id == note_id, Note.owner_id == user.id)).first()
+    if not note:
+        raise HTTPException(404, "Note không tồn tại")
+    return note
+
+
+@router.put("/{note_id}", response_model=NoteRead)
+def update_note(note_id: int,
+                data: NoteUpdate,
+                session: Session = Depends(get_session),
+                user=Depends(get_current_user)):
+    note = session.exec(select(Note).where(Note.id == note_id, Note.owner_id == user.id)).first()
+    if not note:
+        raise HTTPException(404, "Note không tồn tại")
+
+    for field, value in data.dict(exclude_unset=True).items():
+        setattr(note, field, value)
+
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
+
+
+@router.delete("/{note_id}")
+def delete_note(note_id: int,
+                session: Session = Depends(get_session),
+                user=Depends(get_current_user)):
+    note = session.exec(select(Note).where(Note.id == note_id, Note.owner_id == user.id)).first()
+    if not note:
+        raise HTTPException(404, "Note không tồn tại")
+
+    session.delete(note)
+    session.commit()
+    return {"message": "Đã xoá"}
