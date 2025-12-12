@@ -1,0 +1,68 @@
+.keep-editor-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.keep-editor {
+  width: 600px;
+  background: white;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  cursor: text;
+}
+
+.keep-editor.expanded {
+  cursor: default;
+}
+
+.keep-title {
+  width: 100%;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.keep-content {
+  width: 100%;
+  border: none;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  min-height: 40px;
+}
+
+.keep-editor.expanded .keep-content {
+  min-height: 80px;
+}
+
+.keep-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.keep-actions button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.keep-actions button:hover {
+  background: #eee;
+}
+
+.keep-actions .danger {
+  color: red;
+}
+
+.keep-actions .ghost {
+  color: #555;
+}

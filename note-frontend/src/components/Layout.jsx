@@ -1,6 +1,7 @@
 import React from "react";
 import { logout } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import "./Layout.css";
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
@@ -11,21 +12,23 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <header
-        style={{
-          padding: "10px 20px",
-          borderBottom: "1px solid #ddd",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h2>Note Taking App</h2>
-        <button onClick={handleLogout}>Đăng xuất</button>
+    <div className="keep-app">
+      {/* HEADER */}
+      <header className="keep-header">
+        <div className="keep-header-left">
+          <span className="keep-logo">📝</span>
+          <span className="keep-title">Keep</span>
+        </div>
+
+        <div className="keep-header-right">
+          <button className="logout-btn" onClick={handleLogout}>
+            Đăng xuất
+          </button>
+        </div>
       </header>
 
-      <main style={{ flex: 1, display: "flex" }}>{children}</main>
+      {/* BODY */}
+      <div className="keep-body">{children}</div>
     </div>
   );
 }
