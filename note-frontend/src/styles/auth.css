@@ -7,29 +7,42 @@
 
   /* BACKGROUND IMAGE */
   background-image: url("/bn.jpeg");
-  background-size: cover;          /* phủ toàn màn hình */
-  background-position: center;     /* canh giữa */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
 
   position: relative;
+  overflow: hidden;
 }
 
+/* OVERLAY LÀM DỊU ẢNH (RẤT QUAN TRỌNG) */
+.auth-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);   /* chỉnh 0.25–0.45 tùy ảnh */
+  backdrop-filter: blur(4px);        /* có thể bỏ nếu không thích */
+  z-index: 1;
+}
 
 /* CARD LOGIN */
 .auth-box {
-  width: 600px;                 /* ↑ từ 520 → 600 */
-  padding: 56px 64px;           /* ↑ nhẹ */
+  width: 600px;
+  padding: 56px 64px;
   background: #ffffff;
   border-radius: 20px;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.13);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
 
-  font-size: 17px;              /* ↑ base font */
+  font-size: 17px;
+
+  position: relative;
+  z-index: 2;   /* ĐÈ LÊN BACKGROUND + OVERLAY */
 }
 
 /* TIÊU ĐỀ */
 .auth-title {
   text-align: center;
-  font-size: 30px;              /* ↑ từ 28 → 30 */
+  font-size: 30px;
   font-weight: 700;
   margin-bottom: 32px;
 }
@@ -46,7 +59,7 @@
 /* INPUT */
 .auth-box input {
   width: 100%;
-  padding: 16px 18px;           /* input cao hơn */
+  padding: 16px 18px;
   border-radius: 12px;
   border: 1px solid #ccc;
   outline: none;
@@ -66,7 +79,7 @@
   border: none;
   background-color: #1677ff;
   color: white;
-  font-size: 18px;              /* ↑ */
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
 }
