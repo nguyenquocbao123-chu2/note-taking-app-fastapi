@@ -78,27 +78,28 @@ export default function NotesPage() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="keep-main">
-        <div className="keep-search">
-          <SearchBox value={search} onChange={setSearch} />
-        </div>
+    <main className="keep-main">
+  <div className="keep-content">
+    <div className="keep-search">
+      <SearchBox value={search} onChange={setSearch} />
+    </div>
 
-        {/* CREATE / EDIT NOTE */}
-        <div className="keep-editor">
-          <NoteEditor
-            note={selected}
-            onSave={handleSaveNote}
-            onDelete={handleDeleteNote}
-            onCancel={() => setSelected(null)}
-          />
-        </div>
+    <div className="keep-editor">
+      <NoteEditor
+        note={selected}
+        onSave={handleSaveNote}
+        onDelete={handleDeleteNote}
+        onCancel={() => setSelected(null)}
+      />
+    </div>
 
-        {/* NOTES GRID */}
-        <NoteList
-          notes={notes}
-          onSelect={(note) => setSelected(note)}
-        />
-      </main>
+    <NoteList
+      notes={notes}
+      onSelect={(note) => setSelected(note)}
+    />
+  </div>
+</main>
+
     </Layout>
   );
 }

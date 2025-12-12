@@ -69,3 +69,16 @@
   font-weight: 600;
 }
 
+/* MAIN */
+.keep-main {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* QUAN TRỌNG */
+}
+
+/* TRỤC NỘI DUNG GIỮA */
+.keep-content {
+  width: 100%;
+  max-width: 1100px;      /* giống Google Keep */
+  padding: 24px 32px;
+}
