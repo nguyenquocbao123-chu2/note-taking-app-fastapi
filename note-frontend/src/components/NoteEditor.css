@@ -4,43 +4,43 @@
   margin: 32px 0 48px;   /* tăng khoảng cách */
 }
 
-
+/* TRẠNG THÁI THU GỌN */
 .keep-editor {
-  width: 600px;
+  width: 720px;
+  max-width: 95%;
   background: white;
-  border-radius: 12px;
-  padding: 12px 16px;
+  border-radius: 8px;
+  padding: 10px 14px;
   box-shadow: 0 1px 3px rgba(0,0,0,.2);
-  cursor: text;
-  max-width: 90%;
+  transition: all 0.2s ease;
 }
 
+/* KHI MỞ RỘNG */
 .keep-editor.expanded {
-  cursor: default;
+  padding: 16px 18px;
+  border-radius: 12px;
 }
+
+
 
 .keep-title {
   width: 100%;
   border: none;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   outline: none;
   margin-bottom: 8px;
 }
 
 .keep-content {
-  width: 100%;
-  border: none;
-  resize: none;
-  outline: none;
-  font-family: inherit;
   font-size: 15px;
-  min-height: 40px;
+  min-height: 36px;   /* thấp như Keep */
 }
 
 .keep-editor.expanded .keep-content {
-  min-height: 80px;
+  min-height: 90px;
 }
+
 
 .keep-actions {
   display: flex;

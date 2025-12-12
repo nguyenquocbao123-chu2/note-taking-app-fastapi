@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import NoteList from "../components/NoteList";
 import NoteEditor from "../components/NoteEditor";
-import SearchBox from "../components/SearchBox";
 import {
   getNotes,
   createNote,
@@ -33,7 +32,6 @@ export default function NotesPage() {
     loadNotes();
   }, []);
 
-  // Search realtime
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (!search.trim()) {
@@ -50,10 +48,10 @@ export default function NotesPage() {
   const handleSaveNote = async ({ title, content }) => {
     if (!title.trim() && !content.trim()) return;
 
-    if (!selected) {
-      await createNote(title, content);
-    } else {
+    if (selected) {
       await updateNote(selected.id, { title, content });
+    } else {
+      await createNote(title, content);
     }
 
     setSelected(null);
@@ -68,38 +66,22 @@ export default function NotesPage() {
   };
 
   return (
-    <Layout>
-      {/* SIDEBAR */}
-      <aside className="keep-sidebar">
-        <div className="keep-menu active">Ghi chú</div>
-        <div className="keep-menu">Lời nhắc</div>
-        <div className="keep-menu">Lưu trữ</div>
-        <div className="keep-menu">Thùng rác</div>
-      </aside>
+    <Layout search={search} setSearch={setSearch}>
+      <main className="keep-main">
+        <div className="keep-content">
+          <NoteEditor
+            note={selected}
+            onSave={handleSaveNote}
+            onDelete={handleDeleteNote}
+            onCancel={() => setSelected(null)}
+          />
 
-      {/* MAIN CONTENT */}
-    <main className="keep-main">
-  <div className="keep-content">
-    <div className="keep-search">
-      <SearchBox value={search} onChange={setSearch} />
-    </div>
-
-    <div className="keep-editor">
-      <NoteEditor
-        note={selected}
-        onSave={handleSaveNote}
-        onDelete={handleDeleteNote}
-        onCancel={() => setSelected(null)}
-      />
-    </div>
-
-    <NoteList
-      notes={notes}
-      onSelect={(note) => setSelected(note)}
-    />
-  </div>
-</main>
-
+          <NoteList
+            notes={notes}
+            onSelect={(note) => setSelected(note)}
+          />
+        </div>
+      </main>
     </Layout>
   );
 }

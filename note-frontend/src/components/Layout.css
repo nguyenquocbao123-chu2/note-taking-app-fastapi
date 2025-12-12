@@ -10,11 +10,11 @@
 /* HEADER */
 .keep-header {
   height: 64px;
-  background: #ffffff;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 16px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -22,6 +22,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.menu-btn {
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .keep-logo {
@@ -52,16 +59,37 @@
   flex: 1;
   display: flex;
 }
+
+/* SIDEBAR */
 .keep-sidebar {
-  width: 240px;
-  padding: 12px;
+  background: #fff;
+  padding-top: 12px;
+  transition: width 0.2s ease;
+  overflow: hidden;
 }
 
+.keep-sidebar.open {
+  width: 240px;
+}
+
+.keep-sidebar.collapsed {
+  width: 72px;
+}
+
+/* MENU ITEM */
 .keep-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   padding: 12px 16px;
+  margin: 4px 8px;
   border-radius: 24px;
   cursor: pointer;
-  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+.keep-menu:hover {
+  background: #f1f3f4;
 }
 
 .keep-menu.active {
@@ -69,16 +97,31 @@
   font-weight: 600;
 }
 
+.menu-icon {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.menu-text {
+  transition: opacity 0.2s ease;
+}
+
+/* HIDE TEXT WHEN COLLAPSED */
+.keep-sidebar.collapsed .menu-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
 /* MAIN */
 .keep-main {
   flex: 1;
   display: flex;
-  justify-content: center; /* QUAN TRỌNG */
 }
 
-/* TRỤC NỘI DUNG GIỮA */
 .keep-content {
   width: 100%;
-  max-width: 1100px;      /* giống Google Keep */
+  max-width: 1100px;
   padding: 24px 32px;
 }
