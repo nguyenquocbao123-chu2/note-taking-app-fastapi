@@ -1,34 +1,23 @@
 import React from "react";
+import "./NoteList.css";
 
-export default function NoteList({ notes, selectedId, onSelect }) {
+export default function NoteList({ notes, onSelect }) {
+  if (notes.length === 0) {
+    return <p className="keep-empty">Chưa có ghi chú nào.</p>;
+  }
+
   return (
-    <div
-      style={{
-        width: "30%",
-        borderRight: "1px solid #ddd",
-        padding: "10px",
-        overflowY: "auto",
-      }}
-    >
+    <div className="keep-notes-grid">
       {notes.map((note) => (
         <div
           key={note.id}
+          className="keep-note-card"
           onClick={() => onSelect(note)}
-          style={{
-            padding: "8px",
-            marginBottom: "6px",
-            borderRadius: "4px",
-            cursor: "pointer",
-            backgroundColor: note.id === selectedId ? "#e0f0ff" : "#f7f7f7",
-          }}
         >
-          <div style={{ fontWeight: "bold" }}>{note.title}</div>
-          <div style={{ fontSize: "12px", color: "#555" }}>
-            {note.content.slice(0, 60)}...
-          </div>
+          {note.title && <h4>{note.title}</h4>}
+          {note.content && <p>{note.content.slice(0, 120)}</p>}
         </div>
       ))}
-      {notes.length === 0 && <p>Chưa có ghi chú nào.</p>}
     </div>
   );
 }

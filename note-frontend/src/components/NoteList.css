@@ -1,0 +1,40 @@
+/* GRID CHỨA NOTE */
+.keep-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* CARD NOTE */
+.keep-note-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.keep-note-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+.keep-note-card h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.keep-note-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+/* EMPTY STATE */
+.keep-empty {
+  text-align: center;
+  color: #777;
+  margin-top: 48px;
+}
