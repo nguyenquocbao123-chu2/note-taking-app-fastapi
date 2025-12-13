@@ -1,70 +1,127 @@
 .keep-editor-wrapper {
   display: flex;
   justify-content: center;
-  margin: 32px 0 48px;   /* tăng khoảng cách */
+  margin-top: 20px;
 }
 
-/* TRẠNG THÁI THU GỌN */
 .keep-editor {
-  width: 720px;
-  max-width: 95%;
-  background: white;
+   position: relative; 
+  width: 600px;
+  background: #fff;
   border-radius: 8px;
-  padding: 10px 14px;
-  box-shadow: 0 1px 3px rgba(0,0,0,.2);
-  transition: all 0.2s ease;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  cursor: text;
+  transition: box-shadow 0.2s ease;
 }
 
-/* KHI MỞ RỘNG */
 .keep-editor.expanded {
-  padding: 16px 18px;
-  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
-
-
 
 .keep-title {
   width: 100%;
   border: none;
-  font-size: 18px;
-  font-weight: 600;
   outline: none;
+  font-size: 16px;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
-.keep-content {
-  font-size: 15px;
-  min-height: 36px;   /* thấp như Keep */
+.keep-placeholder {
+  color: #5f6368;
+  min-height: 24px;
 }
 
-.keep-editor.expanded .keep-content {
-  min-height: 90px;
+.ql-container {
+  border: none !important;
 }
 
+.ql-toolbar {
+  border: none !important;
+  padding-left: 0;
+}
 
 .keep-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 10px;
   margin-top: 8px;
 }
 
 .keep-actions button {
+  background: none;
   border: none;
-  background: transparent;
   cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-
-.keep-actions button:hover {
-  background: #eee;
-}
-
-.keep-actions .danger {
-  color: red;
+  font-weight: 500;
 }
 
 .keep-actions .ghost {
-  color: #555;
+  color: #5f6368;
+}
+
+.keep-actions .danger {
+  color: #d93025;
+}
+
+
+.keep-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.left-tools button,
+.right-tools button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.right-tools {
+  display: flex;
+  gap: 10px;
+}
+
+.color-picker {
+  position: absolute;
+  bottom: 48px;
+  left: 12px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 10;
+}
+
+.color-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+
+/* === ReactQuill toolbar đặt dưới === */
+.quill-toolbar-bottom {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* Bỏ border toolbar mặc định */
+.ql-toolbar {
+  border: none !important;
+  padding: 0;
+}
+
+/* Bỏ border editor */
+.ql-container {
+  border: none !important;
 }
