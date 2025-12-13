@@ -20,7 +20,15 @@ export default function NoteList({ notes, onSelect }) {
           onClick={() => onSelect(note)}
         >
           {note.title && <h4>{note.title}</h4>}
-          {note.content && <p>{note.content.slice(0, 120)}</p>}
+        {note.content && (
+  <div
+    className="note-preview"
+    dangerouslySetInnerHTML={{
+      __html: note.content.slice(0, 300),
+    }}
+  />
+)}
+
         </div>
       ))}
     </div>

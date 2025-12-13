@@ -45,13 +45,16 @@ export default function NotesPage() {
     return () => clearTimeout(timeout);
   }, [search]);
 
-  const handleSaveNote = async ({ title, content }) => {
+const handleSaveNote = async ({ title, content, bg }) => {
+
     if (!title.trim() && !content.trim()) return;
 
     if (selected) {
-      await updateNote(selected.id, { title, content });
+   await updateNote(selected.id, { title, content, bg });
+
     } else {
-      await createNote(title, content);
+   await createNote({ title, content, bg });
+
     }
 
     setSelected(null);
