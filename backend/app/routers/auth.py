@@ -1,20 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
-from app.schemas import UserCreate, Token
+from app.database import get_session
+from app.schemas import UserCreate, Token, UserLogin
 from app.models import User
 from app.core.security import hash_password, verify_password, create_access_token
-from app.database import get_session
 
-router = APIRouter()
+router = APIRouter(tags=["auth"])
 
 
-@router.post("/register", response_model=Token)
+
+# ======================
+# REGISTER (KHÔNG LOGIN)
+# ======================
+@router.post("/register")
 def register(data: UserCreate, session: Session = Depends(get_session)):
-    # check duplicate
-    exists = session.exec(select(User).where(User.email == data.email)).first()
+    exists = session.exec(
+        select(User).where(User.email == data.email)
+    ).first()
+
     if exists:
-        raise HTTPException(400, "Email đã tồn tại")
+        raise HTTPException(status_code=400, detail="Email đã tồn tại")
 
     user = User(
         email=data.email,
@@ -22,20 +28,32 @@ def register(data: UserCreate, session: Session = Depends(get_session)):
         full_name=data.full_name,
     )
 
-    session.add(user)
-    session.commit()
-    session.refresh(user)
+    try:
+        session.add(user)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(status_code=500, detail="Lỗi tạo tài khoản")
 
-    token = create_access_token({"sub": user.id})
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "message": "Đăng ký thành công. Vui lòng đăng nhập."
+    }
 
 
+# ======================
+# LOGIN
+# ======================
 @router.post("/login", response_model=Token)
-def login(data: UserCreate, session: Session = Depends(get_session)):
-    user = session.exec(select(User).where(User.email == data.email)).first()
+def login(data: UserLogin, session: Session = Depends(get_session)):
+    user = session.exec(
+        select(User).where(User.email == data.email)
+    ).first()
 
     if not user or not verify_password(data.password, user.password_hash):
-        raise HTTPException(401, "Sai email hoặc mật khẩu")
+        raise HTTPException(status_code=401, detail="Sai email hoặc mật khẩu")
 
-    token = create_access_token({"sub": user.id})
-    return {"access_token": token, "token_type": "bearer"}
+    token = create_access_token({"sub": str(user.id)})
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }

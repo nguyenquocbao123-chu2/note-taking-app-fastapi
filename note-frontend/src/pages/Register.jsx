@@ -8,15 +8,28 @@ export default function Register() {
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [success, setSuccess] = useState(""); // ✅ thêm
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
+    setSuccess("");
 
     try {
-      await register(email, password, fullName);
-      navigate("/");
+      // ✅ chỉ gọi register (backend đã sửa để KHÔNG trả token)
+      const res = await register(email, password, fullName);
+
+      // ✅ lấy message từ backend nếu có
+      const msg =
+        res?.data?.message || "Đăng ký thành công. Vui lòng đăng nhập.";
+
+      setSuccess(msg);
+
+      // ✅ hiện thông báo + chuyển về trang login
+      setTimeout(() => {
+        navigate("/login", { state: { registered: true, message: msg } });
+      }, 800);
     } catch (error) {
       setErr(error.response?.data?.detail || "Đăng ký thất bại");
     }
@@ -25,9 +38,10 @@ export default function Register() {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <div className="auth-title">Tạo tài khoản</div>
+        <div className="auth-title">Đăng Kí</div>
 
         {err && <div className="error-text">{err}</div>}
+        {success && <div className="success-text">{success}</div>}
 
         <form onSubmit={handleSubmit}>
           <label>Họ tên</label>

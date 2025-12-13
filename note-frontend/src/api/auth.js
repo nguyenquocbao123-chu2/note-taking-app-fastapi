@@ -6,17 +6,17 @@ export async function register(email, password, fullName) {
     password,
     full_name: fullName || null,
   });
-  const { access_token } = res.data;
-  localStorage.setItem("access_token", access_token);
-  return res.data;
+
+  // ✅ backend register chỉ trả message, KHÔNG lưu token
+  return res.data; // { message: "Đăng ký thành công..." }
 }
 
 export async function login(email, password) {
-  const res = await api.post("/auth/login", {
-    email,
-    password,
-  });
+  const res = await api.post("/auth/login", { email, password });
+
   const { access_token } = res.data;
+  if (!access_token) throw new Error("Không nhận được access_token từ server");
+
   localStorage.setItem("access_token", access_token);
   return res.data;
 }

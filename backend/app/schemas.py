@@ -1,18 +1,23 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 
 
 # ================= USER =====================
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
     password: str
     full_name: Optional[str] = None
 
 
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
 class UserRead(BaseModel):
     id: int
-    email: str
+    email: EmailStr
     full_name: Optional[str]
 
     class Config:
@@ -26,7 +31,6 @@ class Token(BaseModel):
 
 
 # ================= FOLDER =====================
-
 class FolderBase(BaseModel):
     name: str
     parent_id: Optional[int] = None
@@ -45,7 +49,6 @@ class FolderRead(FolderBase):
 
 
 # ================= NOTE =====================
-
 class NoteBase(BaseModel):
     title: str
     content: str
@@ -74,7 +77,6 @@ class NoteRead(NoteBase):
 
 
 # ================= TAG =====================
-
 class TagCreate(BaseModel):
     name: str
 

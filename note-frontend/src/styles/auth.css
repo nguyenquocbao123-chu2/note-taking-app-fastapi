@@ -102,3 +102,12 @@
   margin-bottom: 12px;
   text-align: center;
 }
+
+.success-text{
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #e9fbe9;
+  color: #177d2d;
+  font-size: 14px;
+}

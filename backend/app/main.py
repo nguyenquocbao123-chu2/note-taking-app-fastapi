@@ -1,9 +1,20 @@
+from sqlmodel import SQLModel
+from app.database import engine
+
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import auth, notes, folders, tags, search, share
 
 app = FastAPI(title="Note Taking App Backend")
+
+
+
+@app.on_event("startup")
+def on_startup():
+    SQLModel.metadata.create_all(engine)
 
 # ==========================
 # FIX CORS ERROR TẠI ĐÂY
