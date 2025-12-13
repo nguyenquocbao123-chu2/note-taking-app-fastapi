@@ -125,3 +125,17 @@
 .ql-container {
   border: none !important;
 }
+
+
+
+/* tạo khoảng cách giữa khung nhập và danh sách note */
+.keep-editor-wrapper {
+  margin-bottom: 16px;
+}
+
+/* nếu keep-content đang là flex/column thì thêm gap cũng ok */
+.keep-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

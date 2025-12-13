@@ -20,11 +20,13 @@ export default function NotesPage() {
   const loadNotes = async () => {
     try {
       const data = await getNotes();
-      setNotes(data);
+      setNotes(Array.isArray(data) ? data : []);
     } catch (err) {
       if (err.response?.status === 401) {
         navigate("/login");
       }
+      // các lỗi khác để console cho dễ debug
+      console.error("Load notes error:", err);
     }
   };
 
@@ -34,38 +36,54 @@ export default function NotesPage() {
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
-      if (!search.trim()) {
-        loadNotes();
-      } else {
-        const data = await searchNotes(search);
-        setNotes(data);
+      try {
+        if (!search.trim()) {
+          loadNotes();
+        } else {
+          const data = await searchNotes(search);
+          setNotes(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error("Search notes error:", err);
       }
     }, 300);
 
     return () => clearTimeout(timeout);
   }, [search]);
 
-const handleSaveNote = async ({ title, content, bg }) => {
-
+  // ✅ NOTE: NoteEditor sẽ await onSave và bắt lỗi
+  const handleSaveNote = async ({ title, content, bg, id }) => {
     if (!title.trim() && !content.trim()) return;
 
-    if (selected) {
-   await updateNote(selected.id, { title, content, bg });
+    try {
+      if (selected || id) {
+        const noteId = selected?.id || id;
+        await updateNote(noteId, { title, content, bg });
+      } else {
+        await createNote({ title, content, bg });
+      }
 
-    } else {
-   await createNote({ title, content, bg });
-
+      setSelected(null);
+      await loadNotes();
+    } catch (err) {
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Lưu ghi chú thất bại";
+      throw new Error(msg); // ✅ quan trọng: để NoteEditor hiện lỗi và không reset
     }
-
-    setSelected(null);
-    loadNotes();
   };
 
   const handleDeleteNote = async () => {
     if (!selected) return;
-    await deleteNote(selected.id);
-    setSelected(null);
-    loadNotes();
+
+    try {
+      await deleteNote(selected.id);
+      setSelected(null);
+      await loadNotes();
+    } catch (err) {
+      console.error("Delete note error:", err);
+    }
   };
 
   return (
@@ -79,10 +97,7 @@ const handleSaveNote = async ({ title, content, bg }) => {
             onCancel={() => setSelected(null)}
           />
 
-          <NoteList
-            notes={notes}
-            onSelect={(note) => setSelected(note)}
-          />
+          <NoteList notes={notes} onSelect={(note) => setSelected(note)} />
         </div>
       </main>
     </Layout>

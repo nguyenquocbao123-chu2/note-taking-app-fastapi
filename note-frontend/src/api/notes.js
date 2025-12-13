@@ -10,12 +10,18 @@ export async function getNote(id) {
   return res.data;
 }
 
-export async function createNote(title, content, folderId = null) {
+// ✅ FIX: nhận object {title, content, bg, folder_id}
+export async function createNote(payload) {
+  const { title, content, bg, folder_id = null } = payload || {};
+
+  // Nếu backend của bạn CHƯA có cột bg thì xóa dòng bg bên dưới
   const res = await api.post("/notes", {
     title,
     content,
-    folder_id: folderId,
+    bg,
+    folder_id,
   });
+
   return res.data;
 }
 
@@ -30,8 +36,6 @@ export async function deleteNote(id) {
 }
 
 export async function searchNotes(q) {
-  const res = await api.get("/search", {
-    params: { q },
-  });
+  const res = await api.get("/search", { params: { q } });
   return res.data;
 }

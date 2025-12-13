@@ -8,13 +8,15 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
   const [content, setContent] = useState("");
   const [expanded, setExpanded] = useState(false);
 
-  // màu nền
   const [bg, setBg] = useState("#ffffff");
   const [showColor, setShowColor] = useState(false);
 
+  // ✅ thêm state để chống mất dữ liệu
+  const [saving, setSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const wrapperRef = useRef(null);
 
-  /* Edit note cũ */
   useEffect(() => {
     if (note) {
       setTitle(note.title || "");
@@ -26,20 +28,15 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
     }
   }, [note]);
 
-  /* Click ngoài → lưu */
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        expanded &&
-        wrapperRef.current &&
-        !wrapperRef.current.contains(e.target)
-      ) {
+      if (expanded && wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         handleSave();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [expanded, title, content, bg]);
+  }, [expanded, title, content, bg, saving]);
 
   const resetEditor = () => {
     setTitle("");
@@ -47,15 +44,34 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
     setExpanded(false);
     setShowColor(false);
     setBg("#ffffff");
+    setErrorMsg("");
+    setSaving(false);
   };
 
-  const handleSave = () => {
+  // ✅ sửa: async + chỉ reset khi save OK
+  const handleSave = async () => {
+    if (saving) return;
+
     if (!title.trim() && !content.trim()) {
       resetEditor();
       return;
     }
-    onSave({ title, content, bg });
-    resetEditor();
+
+    try {
+      setSaving(true);
+      setErrorMsg("");
+
+      // onSave nên trả promise (gọi API)
+      await onSave({ title, content, bg, id: note?.id });
+
+      // ✅ chỉ reset khi lưu thành công
+      resetEditor();
+    } catch (err) {
+      // ✅ nếu lỗi: giữ nguyên dữ liệu để user không mất
+      setErrorMsg(err?.message || "Lưu ghi chú thất bại. Vui lòng thử lại.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
@@ -70,20 +86,25 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
         style={{ background: bg }}
         onClick={() => !expanded && setExpanded(true)}
       >
-        {/* TITLE */}
+        {/* ✅ hiển thị lỗi nếu lưu fail */}
+        {expanded && errorMsg && (
+          <div style={{ color: "red", marginBottom: 8, fontSize: 13 }}>
+            {errorMsg}
+          </div>
+        )}
+
         {expanded && (
           <input
             className="keep-title"
             placeholder="Tiêu đề"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            disabled={saving}
           />
         )}
 
-        {/* PLACEHOLDER */}
         {!expanded && <div className="keep-placeholder">Ghi chú...</div>}
 
-        {/* EDITOR */}
         {expanded && (
           <>
             <ReactQuill
@@ -91,18 +112,15 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
               value={content}
               onChange={setContent}
               placeholder="Ghi chú..."
+              readOnly={saving}
               modules={{
                 toolbar: {
-                  container: "#quill-toolbar-bottom", // ⬅️ toolbar đặt dưới
+                  container: "#quill-toolbar-bottom",
                 },
               }}
             />
 
-            {/* TOOLBAR REACTQUILL Ở DƯỚI */}
-            <div
-              id="quill-toolbar-bottom"
-              className="quill-toolbar-bottom"
-            >
+            <div id="quill-toolbar-bottom" className="quill-toolbar-bottom">
               <select className="ql-header" defaultValue="">
                 <option value="1" />
                 <option value="2" />
@@ -120,7 +138,6 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
           </>
         )}
 
-        {/* TOOLBAR KEEP (LƯU / MÀU / ĐÓNG) */}
         {expanded && (
           <div className="keep-toolbar">
             <div className="left-tools">
@@ -130,6 +147,7 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
                   e.stopPropagation();
                   setShowColor(!showColor);
                 }}
+                disabled={saving}
               >
                 🎨
               </button>
@@ -137,19 +155,22 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
 
             <div className="right-tools">
               {note && (
-                <button className="danger" onClick={onDelete}>
+                <button className="danger" onClick={onDelete} disabled={saving}>
                   Xoá
                 </button>
               )}
-              <button onClick={handleSave}>Lưu</button>
-              <button className="ghost" onClick={handleCancel}>
+
+              <button onClick={handleSave} disabled={saving}>
+                {saving ? "Đang lưu..." : "Lưu"}
+              </button>
+
+              <button className="ghost" onClick={handleCancel} disabled={saving}>
                 Đóng
               </button>
             </div>
           </div>
         )}
 
-        {/* CHỌN MÀU */}
         {showColor && (
           <div className="color-picker">
             {[
@@ -167,8 +188,10 @@ export default function NoteEditor({ note, onSave, onDelete, onCancel }) {
                 className="color-dot"
                 style={{ background: c }}
                 onClick={() => {
-                  setBg(c);
-                  setShowColor(false);
+                  if (!saving) {
+                    setBg(c);
+                    setShowColor(false);
+                  }
                 }}
               />
             ))}
