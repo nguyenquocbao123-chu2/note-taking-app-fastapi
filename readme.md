@@ -148,8 +148,6 @@ DELETE /notes/{id}
 
 7. Kết quả đạt được
 
-Hoàn thành đầy đủ yêu cầu bài tập
-
 Backend và Frontend kết nối thành công
 
 Hệ thống hoạt động ổn định
