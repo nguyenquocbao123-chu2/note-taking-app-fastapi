@@ -10,6 +10,11 @@ from app.routers import auth, notes, folders, tags, search, share
 
 app = FastAPI(title="Note Taking App Backend")
 
+from app.database import init_db
+init_db()
+
+
+
 
 
 @app.on_event("startup")
@@ -40,3 +45,4 @@ app.include_router(share.router, prefix="/share", tags=["Share"])
 @app.get("/")
 def root():
     return {"message": "Backend chạy OK"}
+

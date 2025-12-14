@@ -72,9 +72,7 @@
   width: 240px;
 }
 
-.keep-sidebar.collapsed {
-  width: 72px;
-}
+
 
 /* MENU ITEM */
 .keep-menu {
@@ -107,12 +105,7 @@
   transition: opacity 0.2s ease;
 }
 
-/* HIDE TEXT WHEN COLLAPSED */
-.keep-sidebar.collapsed .menu-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-}
+
 
 /* MAIN */
 .keep-main {
@@ -145,4 +138,73 @@
 
 .icon-btn:hover {
   background: #eee;
+}
+
+
+
+.keep-system-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 6px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+  margin: 8px 10px;
+}
+
+.keep-menu {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.keep-menu:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.keep-menu.active {
+  background: rgba(255, 215, 0, 0.25);
+}
+
+.menu-icon { width: 22px; text-align: center; }
+.menu-text { font-weight: 600; }
+
+
+
+/* ===== SIDEBAR MODES ===== */
+
+
+
+/* ẨN HẲN */
+.keep-sidebar.hidden {
+  display: none;
+}
+
+/* khi ẩn sidebar thì content chiếm full */
+.keep-sidebar.hidden + .keep-main,
+.keep-sidebar.hidden ~ .keep-main {
+  margin-left: 0 !important;
+}
+
+.keep-header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header-user{
+  font-weight:600;
+  font-size:14px;
+  color:#222;
+  white-space:nowrap;
 }

@@ -10,25 +10,40 @@ const api = axios.create({
   },
 });
 
-// ✅ Gắn token cho mọi request
+// ===============================
+// GẮN TOKEN CHO MỌI REQUEST
+// ===============================
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
+
   if (token) {
     config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
-// ✅ BẮT BUỘC: xử lý token sai / hết hạn
+// ===============================
+// XỬ LÝ TOKEN HẾT HẠN
+// ===============================
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error?.response?.status === 401) {
-      console.warn("Token invalid → logout");
+    const status = error?.response?.status;
+
+    // ⚠️ CHỈ logout nếu KHÔNG ở trang login
+    if (status === 401 && window.location.pathname !== "/login") {
+      console.warn("Token invalid / expired → logout");
+
       localStorage.removeItem("access_token");
-      window.location.href = "/login"; // ép về login
+
+      // tránh reload vô hạn
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 100);
     }
+
     return Promise.reject(error);
   }
 );

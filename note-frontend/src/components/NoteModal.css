@@ -6,15 +6,26 @@
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  padding: 24px;
 }
 
+/* ✅ Modal KHÔNG scroll nữa */
 .note-modal{
   width: min(760px, 92vw);
   max-height: 80vh;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
   padding: 14px;
-  overflow: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden; /* ✅ quan trọng */
+}
+
+/* Header cố định */
+.note-modal-header{
+  flex: 0 0 auto;
 }
 
 .note-modal-title{
@@ -27,7 +38,29 @@
   margin-bottom: 10px;
 }
 
+/* ✅ Body cuộn */
+.note-modal-body{
+  flex: 1 1 auto;
+  overflow: auto;
+  padding-right: 6px; /* chừa space cho scrollbar */
+}
+
+/* ReactQuill: toolbar sticky (luôn thấy) */
+.note-modal-body .ql-toolbar{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+}
+
+/* giữ editor nhìn thoáng */
+.note-modal-body .ql-container{
+  min-height: 240px;
+}
+
+/* Actions cố định */
 .note-modal-actions{
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -41,4 +74,84 @@
   color: #d11;
   font-size: 13px;
   margin-bottom: 8px;
+}
+
+/* Tags bottom cố định */
+.note-tags-bottom {
+  flex: 0 0 auto;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.note-tags-bottom-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.note-tags-bottom-title {
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.note-tags-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  min-height:28px;
+  align-items:center;
+}
+
+.tag-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background: rgba(0,0,0,0.08);
+  font-size:13px;
+}
+
+.tag-empty{
+  opacity:0.7;
+  font-size:13px;
+}
+
+.tag-btn{
+  border:1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.7);
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+
+.tag-pop{
+  border:1px solid rgba(0,0,0,0.15);
+  background:#fff;
+  border-radius:12px;
+  padding:10px;
+  margin: 8px 0 0;
+  max-height:220px;
+  overflow:auto;
+}
+
+.tag-pop-title{
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.tag-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 4px;
+  cursor:pointer;
+}
+
+.tag-pop-empty{
+  opacity:0.7;
+  font-size:13px;
+  padding:6px 4px;
 }

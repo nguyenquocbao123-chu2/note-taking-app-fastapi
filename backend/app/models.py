@@ -64,17 +64,19 @@ class Note(SQLModel, table=True):
 
     folder_id: Optional[int] = Field(default=None, foreign_key="folder.id")
     owner_id: int = Field(foreign_key="user.id")
-    is_archived: bool = False
+
+    is_archived: bool = Field(default=False)
+
+    # ✅ SOFT DELETE (THÙNG RÁC)
+    is_deleted: bool = Field(default=False)
+    deleted_at: Optional[datetime] = Field(default=None)
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
     owner: Optional[User] = Relationship(back_populates="notes")
     folder: Optional[Folder] = Relationship(back_populates="notes")
-    tags: List[Tag] = Relationship(
-        back_populates="notes",
-        link_model=NoteTag
-    )
+    tags: List["Tag"] = Relationship(back_populates="notes", link_model=NoteTag)
 
 
 # =========================

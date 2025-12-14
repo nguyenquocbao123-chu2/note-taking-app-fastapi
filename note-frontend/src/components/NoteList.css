@@ -6,16 +6,26 @@
   gap: 14px;
 }
 
-/* card giống Keep */
+/* =========================
+   CARD GIỐNG KEEP (FIXED HEIGHT)
+   ========================= */
 .keep-note-card {
+  position: relative;
+
   text-align: left;
   border: 1px solid rgba(0,0,0,0.12);
   border-radius: 12px;
   padding: 12px 12px;
+  padding-bottom: 48px;            /* ✅ CHỪA CHỖ CHO TOOLBAR */
   background: #fff;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
   transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+
+  height: 190px;                   /* chỉnh 180/200/220 tuỳ bạn */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;                /* ✅ tránh content làm vỡ card */
 }
 
 .keep-note-card:hover {
@@ -29,32 +39,151 @@
   box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25);
 }
 
-/* title */
+/* =========================
+   BODY (TITLE + PREVIEW)
+   ========================= */
+.note-body{
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* title: tối đa 2 dòng */
 .note-title {
   margin: 0 0 8px;
   font-size: 15px;
   font-weight: 700;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+      /* ✅ 2 dòng */
+  overflow: hidden;
 }
 
-/* preview content: chống tràn, không phá layout */
+/* preview: clamp để không ăn hết card */
 .note-preview {
   font-size: 13px;
   line-height: 1.4;
   opacity: 0.9;
-  max-height: 140px;
+
   overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+     /* ✅ số dòng preview */
 }
 
-/* quill hay sinh p margin, chỉnh lại cho gọn */
-.note-preview p {
-  margin: 0 0 6px;
+/* quill hay sinh p/ul/ol margin, chỉnh lại cho gọn */
+.note-preview p,
+.note-preview ul,
+.note-preview ol{
+  margin: 0;
 }
-.note-preview p:last-child {
-  margin-bottom: 0;
+
+/* =========================
+   TAGS (LUÔN HIỆN 1 DÒNG Ở ĐÁY)
+   ========================= */
+.note-tags-preview{
+  flex: 0 0 auto;
+
+  display:flex;
+  gap:6px;
+  margin-top: 10px;
+
+  flex-wrap: nowrap;         /* ✅ 1 dòng */
+  overflow: hidden;          /* ✅ không tràn */
+  white-space: nowrap;
+  align-items: center;
+}
+
+.tag-chip.small{
+  flex: 0 0 auto;
+  font-size:12px;
+  padding:3px 8px;
+  background: rgba(0,0,0,0.08);
+  border-radius:999px;
+}
+
+.tag-more{
+  flex: 0 0 auto;
+  font-size:12px;
+  opacity:0.7;
 }
 
 /* empty */
 .keep-empty {
   margin-top: 18px;
   opacity: 0.7;
+}
+
+/* =========================
+   ICON BUTTON (trash/restore)
+   ========================= */
+.icon-btn{
+  width: 34px;
+  height: 30px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.75);
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.icon-btn:hover{
+  filter: brightness(0.96);
+}
+
+.icon-btn.danger{
+  border-color: rgba(255, 0, 0, 0.25);
+}
+
+.icon-btn.danger:hover{
+  border-color: rgba(255, 0, 0, 0.45);
+}
+
+/* =========================
+   KEEP-LIKE HOVER TOOLBAR
+   ========================= */
+.note-toolbar {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 8px;
+
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+  pointer-events: none;
+}
+
+.keep-note-card:hover .note-toolbar,
+.keep-note-card:focus-within .note-toolbar {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tb-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 6px 8px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tb-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.tb-btn.danger {
+  background: rgba(255, 220, 220, 0.7);
+}
+
+.tb-btn.danger:hover {
+  background: rgba(255, 220, 220, 0.95);
 }

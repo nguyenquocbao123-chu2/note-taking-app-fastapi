@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 # ================= USER =====================
@@ -47,6 +47,20 @@ class FolderRead(FolderBase):
     class Config:
         from_attributes = True
 
+
+# ================= TAG =====================
+class TagCreate(BaseModel):
+    name: str
+
+
+class TagRead(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
+
+
 # ================= NOTE =====================
 class NoteBase(BaseModel):
     title: str
@@ -70,20 +84,12 @@ class NoteRead(NoteBase):
     id: int
     folder_id: Optional[int]
     owner_id: int
+    is_archived: bool = False
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
-
-
-class TagCreate(BaseModel):
-    name: str
-
-
-class TagRead(BaseModel):
-    id: int
-    name: str
+    # ✅ QUAN TRỌNG: để search/list trả về có tags
+    tags: List[TagRead] = []
 
     class Config:
         from_attributes = True
