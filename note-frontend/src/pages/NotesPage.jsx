@@ -2,19 +2,14 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import NoteList from "../components/NoteList";
 import NoteEditor from "../components/NoteEditor";
-import {
-  getNotes,
-  createNote,
-  updateNote,
-  deleteNote,
-  searchNotes,
-} from "../api/notes";
+import NoteModal from "../components/NoteModal"; // ✅ thêm modal
+import { getNotes, createNote, updateNote, deleteNote, searchNotes } from "../api/notes";
 import { useNavigate } from "react-router-dom";
 
 export default function NotesPage() {
   const [notes, setNotes] = useState([]);
-  const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
+  const [modalNote, setModalNote] = useState(null); // ✅ note đang mở popup
   const navigate = useNavigate();
 
   const loadNotes = async () => {
@@ -22,10 +17,7 @@ export default function NotesPage() {
       const data = await getNotes();
       setNotes(Array.isArray(data) ? data : []);
     } catch (err) {
-      if (err.response?.status === 401) {
-        navigate("/login");
-      }
-      // các lỗi khác để console cho dễ debug
+      if (err.response?.status === 401) navigate("/login");
       console.error("Load notes error:", err);
     }
   };
@@ -51,35 +43,46 @@ export default function NotesPage() {
     return () => clearTimeout(timeout);
   }, [search]);
 
-  // ✅ NOTE: NoteEditor sẽ await onSave và bắt lỗi
-  const handleSaveNote = async ({ title, content, bg, id }) => {
+  // ✅ KHUNG TRÊN CHỈ DÙNG TẠO NOTE MỚI
+  const handleCreateNote = async ({ title, content, bg }) => {
     if (!title.trim() && !content.trim()) return;
 
     try {
-      if (selected || id) {
-        const noteId = selected?.id || id;
-        await updateNote(noteId, { title, content, bg });
-      } else {
-        await createNote({ title, content, bg });
-      }
-
-      setSelected(null);
+      await createNote({ title, content, bg });
       await loadNotes();
     } catch (err) {
       const msg =
         err?.response?.data?.detail ||
         err?.response?.data?.message ||
-        "Lưu ghi chú thất bại";
-      throw new Error(msg); // ✅ quan trọng: để NoteEditor hiện lỗi và không reset
+        "Tạo ghi chú thất bại";
+      throw new Error(msg);
     }
   };
 
-  const handleDeleteNote = async () => {
-    if (!selected) return;
+  // ✅ LƯU NOTE TRONG MODAL (SỬA NOTE)
+  const handleSaveModal = async ({ title, content, bg }) => {
+    if (!modalNote) return;
 
     try {
-      await deleteNote(selected.id);
-      setSelected(null);
+      await updateNote(modalNote.id, { title, content, bg });
+      await loadNotes();
+      setModalNote(null); // đóng giống Keep
+    } catch (err) {
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Lưu ghi chú thất bại";
+      throw new Error(msg);
+    }
+  };
+
+  // ✅ XOÁ NOTE TRONG MODAL
+  const handleDeleteModal = async () => {
+    if (!modalNote) return;
+
+    try {
+      await deleteNote(modalNote.id);
+      setModalNote(null);
       await loadNotes();
     } catch (err) {
       console.error("Delete note error:", err);
@@ -89,15 +92,31 @@ export default function NotesPage() {
   return (
     <Layout search={search} setSearch={setSearch}>
       <main className="keep-main">
-        <div className="keep-content">
+        {/* ✅ thêm khoảng cách giống Keep */}
+        <div className="keep-content" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          
+          {/* ✅ Editor luôn là tạo note mới */}
           <NoteEditor
-            note={selected}
-            onSave={handleSaveNote}
-            onDelete={handleDeleteNote}
-            onCancel={() => setSelected(null)}
+            note={null}
+            onSave={handleCreateNote}
+            onCancel={() => {}}
           />
 
-          <NoteList notes={notes} onSelect={(note) => setSelected(note)} />
+          {/* ✅ Click note -> mở modal */}
+          <NoteList
+            notes={notes}
+            onSelect={(note) => setModalNote(note)}
+          />
+
+          {/* ✅ Modal giống Keep */}
+          {modalNote && (
+            <NoteModal
+              note={modalNote}
+              onClose={() => setModalNote(null)}
+              onSave={handleSaveModal}
+              onDelete={handleDeleteModal}
+            />
+          )}
         </div>
       </main>
     </Layout>

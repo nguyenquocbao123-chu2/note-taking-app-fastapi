@@ -60,6 +60,8 @@ class Note(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str
     content: str
+    bg: str = Field(default="#ffffff")
+
     folder_id: Optional[int] = Field(default=None, foreign_key="folder.id")
     owner_id: int = Field(foreign_key="user.id")
     is_archived: bool = False

@@ -53,6 +53,7 @@ def login(data: UserLogin, session: Session = Depends(get_session)):
         raise HTTPException(status_code=401, detail="Sai email hoặc mật khẩu")
 
     token = create_access_token({"sub": str(user.id)})
+
     return {
         "access_token": token,
         "token_type": "bearer"

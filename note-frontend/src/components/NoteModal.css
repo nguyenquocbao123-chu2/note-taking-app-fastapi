@@ -1,0 +1,44 @@
+.note-modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.note-modal{
+  width: min(760px, 92vw);
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  padding: 14px;
+  overflow: auto;
+}
+
+.note-modal-title{
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  font-weight: 600;
+  background: transparent;
+  margin-bottom: 10px;
+}
+
+.note-modal-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.note-modal-actions .danger{ color: #d11; }
+.note-modal-actions .ghost{ opacity: .7; }
+
+.note-modal-error{
+  color: #d11;
+  font-size: 13px;
+  margin-bottom: 8px;
+}

@@ -10,23 +10,39 @@ export async function getNote(id) {
   return res.data;
 }
 
-// ✅ FIX: nhận object {title, content, bg, folder_id}
-export async function createNote(payload) {
-  const { title, content, bg, folder_id = null } = payload || {};
+// ✅ createNote nhận object: { title, content, bg, folder_id }
+export async function createNote(payload = {}) {
+  const title = (payload.title ?? "").toString();
+  const content = (payload.content ?? "").toString();
+  const bg = payload.bg ?? "#ffffff";
+  const folder_id = payload.folder_id ?? null;
 
-  // Nếu backend của bạn CHƯA có cột bg thì xóa dòng bg bên dưới
-  const res = await api.post("/notes", {
+  // tránh tạo note rỗng
+  if (!title.trim() && !content.trim()) {
+    return null;
+  }
+
+  const body = {
     title,
     content,
-    bg,
     folder_id,
-  });
+    bg, // backend có bg thì OK
+  };
 
+  // nếu bg bị undefined/null thì loại bỏ luôn cho sạch
+  if (body.bg == null) delete body.bg;
+
+  const res = await api.post("/notes", body);
   return res.data;
 }
 
-export async function updateNote(id, data) {
-  const res = await api.put(`/notes/${id}`, data);
+export async function updateNote(id, data = {}) {
+  const body = { ...data };
+
+  // Nếu bg bị undefined/null thì đừng gửi
+  if (body.bg == null) delete body.bg;
+
+  const res = await api.put(`/notes/${id}`, body);
   return res.data;
 }
 

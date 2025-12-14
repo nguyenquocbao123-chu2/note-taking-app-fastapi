@@ -47,11 +47,11 @@ class FolderRead(FolderBase):
     class Config:
         from_attributes = True
 
-
 # ================= NOTE =====================
 class NoteBase(BaseModel):
     title: str
     content: str
+    bg: Optional[str] = "#ffffff"
 
 
 class NoteCreate(NoteBase):
@@ -61,6 +61,7 @@ class NoteCreate(NoteBase):
 class NoteUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
+    bg: Optional[str] = None
     folder_id: Optional[int] = None
     is_archived: Optional[bool] = None
 
@@ -76,7 +77,6 @@ class NoteRead(NoteBase):
         from_attributes = True
 
 
-# ================= TAG =====================
 class TagCreate(BaseModel):
     name: str
 
