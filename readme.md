@@ -1,171 +1,144 @@
-Note Taking App (FastAPI)
+# Note Taking App
 
-Môn học: Phát triển Ứng dụng Mã Nguồn Mở
+Ứng dụng **Note Taking App** là hệ thống web hỗ trợ người dùng tạo, quản lý và lưu trữ ghi chú cá nhân.
+Hệ thống được xây dựng bằng **FastAPI + PostgreSQL** cho Backend và **ReactJS (Vite)** cho Frontend, đáp ứng yêu cầu bảo mật, hiệu năng và khả năng mở rộng.
 
-Sinh viên thực hiện:
+Ứng dụng áp dụng **JWT Authentication** nhằm đảm bảo xác thực và phân quyền dữ liệu theo từng người dùng.
 
-Nguyễn Quốc Bảo – MSSV: 23050141
+# Mục Tiêu Dự Án
 
-Hồ Chanh Phát – MSSV: 23050142
+- Xây dựng một hệ thống ghi chú cá nhân dạng Web có tính thực tế
+- Áp dụng kiến thức môn *Phát triển Ứng dụng Mã Nguồn Mở*
+- Rèn luyện kỹ năng:
+    + Backend API
+    + ORM & Database
+    + Xác thực – phân quyền
+    + Kết nối Frontend – Backend
+- Tạo nền tảng cho các ứng dụng quản lý cá nhân trong tương lai
 
-1. Giới thiệu
+# Công Nghệ Sử Dụng
 
-Note Taking App là ứng dụng web giúp người dùng tạo và quản lý ghi chú cá nhân.
-Hệ thống được xây dựng theo mô hình Client – Server, sử dụng FastAPI cho Backend và ReactJS (Vite) cho Frontend.
+* Backend:
+        Python,
+        FastAPI,
+        SQLAlchemy ORM,
+        Alembic,
+        PostgreSQL,
+        JWT Authentication,
+        Uvicorn
 
-Ứng dụng áp dụng JWT Authentication nhằm đảm bảo bảo mật và phân quyền dữ liệu theo từng người dùng.
+* Frontend:
+        ReactJS,
+        Vite,
+        JavaScript (ES6),
+        CSS,
+        Axios,
+        React Router DOM
 
-2. Công nghệ sử dụng
-Backend
+* Môi Trường Phát Triển:
+        Visual Studio Code,
+        Git,
+        GitHub
 
-Python
+# Kiến Trúc Hệ Thống
 
-FastAPI
+Frontend (ReactJS)
+        ↓
+FastAPI Backend (REST API)
+        ↓
+PostgreSQL Database
 
-SQLAlchemy
+- Frontend gọi API thông qua HTTP
+- Backend xử lý nghiệp vụ và xác thực JWT
+- Database lưu trữ thông tin người dùng và ghi chú
 
-Alembic
+# Cài Đặt & Chạy Dự Án
 
-PostgreSQL
+1. Chạy Backend (FastAPI)
 
-JWT Authentication
-
-Uvicorn
-
-Frontend
-
-ReactJS
-
-Vite
-
-JavaScript (ES6)
-
-CSS
-
-Axios
-
-React Router DOM
-
-3. Kiến trúc hệ thống
-
-Ứng dụng được thiết kế theo mô hình 3-tier architecture:
-
-Frontend: Hiển thị giao diện, gửi request HTTP
-
-Backend: Xử lý nghiệp vụ, xác thực JWT, cung cấp REST API
-
-Database: Lưu trữ thông tin người dùng và ghi chú
-
-4. Chức năng chính
-Người dùng
-
-Đăng ký tài khoản
-
-Đăng nhập
-
-Đăng xuất
-
-Ghi chú
-
-Tạo ghi chú
-
-Xem danh sách ghi chú
-
-Chỉnh sửa ghi chú
-
-Xóa ghi chú
-
-Tìm kiếm ghi chú
-
-Thêm tag cho ghi chú
-
-Lưu trữ ghi chú
-
-5. Hướng dẫn cài đặt và chạy dự án
-5.1. Chạy Backend (FastAPI)
-
-Tạo và kích hoạt môi trường ảo:
-
+- Tạo môi trường ảo:
 python -m venv venv
-venv\Scripts\activate        # Windows
-source venv/bin/activate     # Linux / Mac
 
+- Kích hoạt môi trường ảo:
+venv\Scripts\activate        (Windows)
+source venv/bin/activate     (Linux / Mac)
 
-Cài đặt thư viện:
-
+- Cài đặt thư viện:
 pip install -r requirements.txt
 
-
-Chạy migration (nếu có):
-
+- Chạy migration:
 alembic upgrade head
 
-
-Chạy Backend:
-
+- Chạy ứng dụng:
 uvicorn app.main:app --reload
 
-
-Backend chạy tại:
-
-http://127.0.0.1:8000
-
-
-API Docs:
-
+- Truy cập:
 http://127.0.0.1:8000/docs
 
-5.2. Chạy Frontend (React + Vite)
+2. Chạy Frontend (React + Vite)
+
 npm install
 npm run dev
 
-
-Frontend chạy tại:
-
+- Truy cập:
 http://localhost:5173
 
-6. Kết nối Frontend – Backend
+# Xác Thực & Phân Quyền
 
-Frontend giao tiếp với Backend thông qua REST API.
-JWT Token được lưu trong localStorage và gửi kèm trong header:
+Hệ thống sử dụng JWT (JSON Web Token):
 
+- Người dùng chỉ thao tác dữ liệu ghi chú cá nhân
+- Token lưu trong localStorage
+- Gửi kèm header:
 Authorization: Bearer <token>
 
+# Chức Năng Chính
 
-Các API chính:
+1. Người Dùng:
+Đăng ký,
+Đăng nhập,
+Đăng xuất
+
+2. Quản Lý Ghi Chú:
+Tạo ghi chú,
+Xem danh sách ghi chú,
+Chỉnh sửa ghi chú,
+Xóa ghi chú,
+Tìm kiếm ghi chú,
+Gắn tag,
+Lưu trữ ghi chú
+
+# API Chính
 
 POST /auth/register
-
 POST /auth/login
-
 GET /notes
-
 POST /notes
-
 PUT /notes/{id}
-
 DELETE /notes/{id}
 
-7. Kết quả đạt được
+# Demo Hệ Thống
 
-Backend và Frontend kết nối thành công
+- Trang đăng nhập
+- Trang danh sách ghi chú
+- Trang tạo / chỉnh sửa ghi chú
+- Swagger UI
 
-Hệ thống hoạt động ổn định
+# Thông Tin Sinh Viên
 
-Đáp ứng tiêu chí môn học
+1. Sinh viên 1:
+- Họ tên: Nguyễn Quốc Bảo
+- MSSV: 23050141
+- Trường: Đại học Bình Dương
+- Môn: Phát triển Ứng dụng Mã Nguồn Mở
 
-8. Hướng phát triển
+2. Sinh viên 2:
+- Họ tên: Hồ Chanh Phát
+- MSSV: 23050142
+- Trường: Đại học Bình Dương
+- Môn: Phát triển Ứng dụng Mã Nguồn Mở
 
-Cải thiện giao diện người dùng
+# Kết Luận
 
-Triển khai hệ thống lên Cloud
-
-9. Tài liệu tham khảo
-
-https://fastapi.tiangolo.com
-
-https://react.dev
-
-https://vitejs.dev
-
-https://jwt.io
+Dự án đã xây dựng thành công ứng dụng Note Taking App với đầy đủ chức năng quản lý ghi chú cá nhân,
+đáp ứng tốt yêu cầu môn học và có khả năng mở rộng trong thực tế.
