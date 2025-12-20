@@ -142,3 +142,5 @@ DELETE /notes/{id}
 
 Dự án đã xây dựng thành công ứng dụng Note Taking App với đầy đủ chức năng quản lý ghi chú cá nhân,
 đáp ứng tốt yêu cầu môn học và có khả năng mở rộng trong thực tế.
+
+link ứng dụng đã up render https://note-taking-app-fastapi-1.onrender.com/
